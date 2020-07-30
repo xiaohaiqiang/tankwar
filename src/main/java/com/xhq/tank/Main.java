@@ -1,10 +1,9 @@
-import java.awt.*;
+package com.xhq.tank;
 
 public class Main {
     public static void main(String[] args) {
-        TankFrame tf = new TankFrame();
 
-        tf.setVisible(true);
+        TankFrame.INSTANCE.setVisible(true);
 
         while(true){
             try {
@@ -13,7 +12,7 @@ public class Main {
                 e.printStackTrace();
             }
 
-            tf.repaint();//repaint()----update()----paint()
+            TankFrame.INSTANCE.repaint();//repaint()----update()----paint()
         }
     }
 }

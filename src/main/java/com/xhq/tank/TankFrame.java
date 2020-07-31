@@ -10,9 +10,12 @@ public class TankFrame extends Frame {
 
     public static final TankFrame INSTANCE = new TankFrame();
 
-    private Tank myTank;
-    private Tank enemy;
+    private Player myTank;
 
+    Explode e = new Explode(150,150);
+
+    private List<Explode> explodes;
+    private List<Tank> tanks;
     private List<Bullet> bullets;
 
     public static final int GAME_WIDTH = 800;
@@ -25,10 +28,21 @@ public class TankFrame extends Frame {
 
         this.addKeyListener(new TankKeyListener());
 
-        myTank = new Tank(100,100, Dir.R, Group.GOOD);
-        enemy = new Tank(200, 200, Dir.D, Group.BAD);
+        initGameObjects();
+
+
+    }
+
+    private void initGameObjects() {
+        myTank = new Player(100,100, Dir.R, Group.GOOD);
 
         bullets = new ArrayList<Bullet>();
+        tanks = new ArrayList<Tank>();
+        explodes = new ArrayList<Explode>();
+
+        for(int i = 0; i < 10; i++){
+            tanks.add(new Tank(100+ 50*i, 200, Dir.D,Group.BAD));
+        }
     }
 
     public void add(Bullet bullet){
@@ -53,15 +67,52 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
+
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("bullets" + bullets.size(), 10, 50);
+        g.drawString("enemies:" + tanks.size(), 10, 70);
+        g.drawString("explode:" + explodes.size(), 10, 90);
+
+        g.setColor(c);
+
+        e.paint(g);
+
         myTank.paint(g);
-        enemy.paint(g);
-        for(Bullet bullet : bullets){
-            bullet.paint(g);
+        for(int i = 0; i < tanks.size(); i++){
+            if(!tanks.get(i).isLive()){
+                tanks.remove(i);
+            }else{
+                tanks.get(i).paint(g);
+            }
+        }
+
+        for(int i = 0; i < bullets.size(); i++){
+            for(int j = 0; j < tanks.size(); j++){
+                bullets.get(i).collidesWithTank(tanks.get(j));
+            }
+
+            if(!bullets.get(i).isLive()){
+                bullets.remove(i);
+            }else{
+                bullets.get(i).paint(g);
+            }
+        }
+
+        for(int i = 0; i < explodes.size(); i++){
+            if(!explodes.get(i).isLive()){
+                explodes.remove(i);
+            }else{
+                explodes.get(i).paint(g);
+            }
         }
     }
 
-    private class TankKeyListener extends KeyAdapter {
+    public void add(Explode explode) {
+        this.explodes.add(explode);
+    }
 
+    private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
             myTank.keyPressed(e);

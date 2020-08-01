@@ -2,7 +2,7 @@ package com.xhq.tank;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends AbstractGameObject{
     private int x;
     private int y;
     private Dir dir;

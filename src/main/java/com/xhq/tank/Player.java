@@ -1,11 +1,33 @@
 package com.xhq.tank;
 
+import com.xhq.tank.strategy.DefaultFireStrategy;
+import com.xhq.tank.strategy.FireStrategy;
+import com.xhq.tank.strategy.FourDirFireStrategy;
+import com.xhq.tank.strategy.LeftRightFireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Player {
+public class Player extends AbstractGameObject{
     private int x;
     private int y;
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     private Dir dir;
     private boolean bL, bU, bR, bD;
     private boolean moving = false;
@@ -28,6 +50,9 @@ public class Player {
         this.y = y;
         this.dir = dir;
         this.group = group;
+
+        //init fire strategy from config file
+        this.initFireStrategy();
     }
 
     public void paint(Graphics g) {
@@ -152,10 +177,21 @@ public class Player {
         setMainDir();
     }
 
+    private FireStrategy strategy = null;
+    private void initFireStrategy(){
+
+        String className = PropertyMgr.get("tankFireStrategy");
+        try {
+            Class c = Class.forName(className);
+            strategy = (FireStrategy) c.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fire() {
-        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
-        int bY = y +ResourceMgr.goodTankU.getHeight() / 2 -ResourceMgr.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
+
+        strategy.fire(this);
     }
 
     public void die() {

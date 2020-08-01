@@ -2,7 +2,7 @@ package com.xhq.tank;
 
 import java.awt.*;
 
-public class Explode {
+public class Explode extends AbstractGameObject{
     private int x;
     private int y;
     private int width,height;

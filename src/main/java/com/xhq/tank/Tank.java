@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
-public class Tank {
+public class Tank extends AbstractGameObject{
     private int x;
     private int y;
     private Dir dir;

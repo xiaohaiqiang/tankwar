@@ -18,6 +18,7 @@ public class Tank extends AbstractGameObject{
     private int width, height;
 
     private int oldX, oldY;
+    private Rectangle rect;
 
     public Group getGroup() {
         return group;
@@ -48,6 +49,8 @@ public class Tank extends AbstractGameObject{
         oldY = y;
         this.width = ResourceMgr.goodTankU.getWidth();
         this.height = ResourceMgr.goodTankU.getHeight();
+
+        this.rect = new Rectangle(x,y,width,height);
     }
 
     public void paint(Graphics g) {
@@ -70,6 +73,10 @@ public class Tank extends AbstractGameObject{
         }
 
         move();
+
+        //update rect
+        rect.x = x;
+        rect.y = y;
     }
 
     private void move() {
@@ -141,8 +148,13 @@ public class Tank extends AbstractGameObject{
         }
     }
 
-    private void back() {
+    public void back() {
         this.x = oldX;
         this.y = oldY;
+    }
+
+    public Rectangle getRect() {
+
+        return rect;
     }
 }

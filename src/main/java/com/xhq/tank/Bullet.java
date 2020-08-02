@@ -8,6 +8,9 @@ public class Bullet extends AbstractGameObject{
     private Dir dir;
     private Group group;
     private boolean live = true;
+    private Rectangle rect;
+    private int w = ResourceMgr.bulletU.getWidth();
+    private int h = ResourceMgr.bulletU.getHeight();
 
     public boolean isLive() {
         return live;
@@ -24,6 +27,8 @@ public class Bullet extends AbstractGameObject{
         this.y = y;
         this.dir = dir;
         this.group = group;
+
+        rect = new Rectangle(x,y,w, h);
     }
 
     public void paint(Graphics g) {
@@ -42,9 +47,19 @@ public class Bullet extends AbstractGameObject{
                 g.drawImage(ResourceMgr.bulletD, x, y, null);
                 break;
         }
-
-
         move();
+
+        //update the rect
+        rect.x = x;
+        rect.y = y;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     private void move() {
@@ -63,24 +78,19 @@ public class Bullet extends AbstractGameObject{
                 break;
         }
 
+
         boundsCheck();
     }
 
     public void collidesWithTank(Tank tank) {
-        if(!this.isLive() || !tank.isLive()) return ;
-        if(this.group == tank.getGroup()) return ;
 
-        Rectangle rect = new Rectangle(x, y, ResourceMgr.bulletU.getWidth(),ResourceMgr.bulletU.getHeight());
-        Rectangle rectTank = new Rectangle(tank.getX(), tank.getY(),
-                ResourceMgr.goodTankU.getWidth(),ResourceMgr.goodTankU.getHeight());
-
-        if(rect.intersects(rectTank)){
-            this.die();
-            tank.die();
-        }
     }
 
-    private void die() {
+    public Rectangle getRect(){
+        return rect;
+    }
+
+    public void die() {
         this.setLive(false);
     }
 

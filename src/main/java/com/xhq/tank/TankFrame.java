@@ -1,9 +1,15 @@
 package com.xhq.tank;
 
+import com.xhq.tank.chainofresponsibility.BulletTankCollider;
+import com.xhq.tank.chainofresponsibility.BulletWallCollider;
+import com.xhq.tank.chainofresponsibility.Collider;
+import com.xhq.tank.chainofresponsibility.ColliderChain;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TankFrame extends Frame {
@@ -11,6 +17,8 @@ public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
 
     private Player myTank;
+
+    ColliderChain chain = new ColliderChain();
 
     Explode e = new Explode(150,150);
 
@@ -29,6 +37,8 @@ public class TankFrame extends Frame {
         initGameObjects();
 
     }
+
+
 
     private void initGameObjects() {
         myTank = new Player(100,100, Dir.R, Group.GOOD);
@@ -65,12 +75,14 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
+
+
     @Override
     public void paint(Graphics g) {
 
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-//        g.drawString("bullets" + bullets.size(), 10, 50);
+        g.drawString("objects:" + objects.size(), 10, 50);
 //        g.drawString("enemies:" + tanks.size(), 10, 70);
 //        g.drawString("explode:" + explodes.size(), 10, 90);
 
@@ -80,35 +92,22 @@ public class TankFrame extends Frame {
 
         myTank.paint(g);
         for(int i = 0; i < objects.size(); i++){
-            objects.get(i).paint(g);
+
+            if(!objects.get(i).isLive()) {
+                objects.remove(i);
+                break;
+            }
+
+            AbstractGameObject go1 = objects.get(i);
+            for(int j = 0; j < objects.size(); j++){
+                AbstractGameObject go2 = objects.get(j);
+                chain.collide(go1, go2);
+            }
+
+            if(objects.get(i).isLive()){
+                objects.get(i).paint(g);
+            }
         }
-//        for(int i = 0; i < tanks.size(); i++){
-//            if(!tanks.get(i).isLive()){
-//                tanks.remove(i);
-//            }else{
-//                tanks.get(i).paint(g);
-//            }
-//        }
-//
-//        for(int i = 0; i < bullets.size(); i++){
-//            for(int j = 0; j < tanks.size(); j++){
-//                bullets.get(i).collidesWithTank(tanks.get(j));
-//            }
-//
-//            if(!bullets.get(i).isLive()){
-//                bullets.remove(i);
-//            }else{
-//                bullets.get(i).paint(g);
-//            }
-//        }
-//
-//        for(int i = 0; i < explodes.size(); i++){
-//            if(!explodes.get(i).isLive()){
-//                explodes.remove(i);
-//            }else{
-//                explodes.get(i).paint(g);
-//            }
-//        }
     }
 
     private class TankKeyListener extends KeyAdapter {

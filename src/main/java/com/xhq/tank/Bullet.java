@@ -9,8 +9,9 @@ public class Bullet extends AbstractGameObject{
     private Group group;
     private boolean live = true;
     private Rectangle rect;
-    private int w = ResourceMgr.bulletU.getWidth();
-    private int h = ResourceMgr.bulletU.getHeight();
+    public static final int w = ResourceMgr.bulletU.getWidth();
+    public static final int h = ResourceMgr.bulletU.getHeight();
+    public static final int SPEED = 6;
 
     public boolean isLive() {
         return live;
@@ -20,7 +21,7 @@ public class Bullet extends AbstractGameObject{
         this.live = live;
     }
 
-    public static final int SPEED = 6;
+
 
     public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -80,10 +81,6 @@ public class Bullet extends AbstractGameObject{
 
 
         boundsCheck();
-    }
-
-    public void collidesWithTank(Tank tank) {
-
     }
 
     public Rectangle getRect(){

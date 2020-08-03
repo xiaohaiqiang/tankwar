@@ -5,4 +5,4 @@ gameHeight=480
 # tank fire strategy
 tankFireStrategy=com.xhq.tank.strategy.DefaultFireStrategy
 
-colliders=com.xhq.tank.chainofresponsibility.BulletTankCollider,com.xhq.tank.chainofresponsibility.BulletWallCollider,com.xhq.tank.chainofresponsibility.TankWallCollider
+colliders=com.xhq.tank.chainofresponsibility.BulletTankCollider,com.xhq.tank.chainofresponsibility.BulletWallCollider,com.xhq.tank.chainofresponsibility.TankWallCollider,com.xhq.tank.chainofresponsibility.TankTankCollider

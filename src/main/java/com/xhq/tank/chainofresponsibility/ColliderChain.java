@@ -6,7 +6,7 @@ import com.xhq.tank.PropertyMgr;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColliderChain implements Collider{
+public class ColliderChain implements Collider {
 
     private List<Collider> colliders;
 

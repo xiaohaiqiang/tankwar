@@ -3,6 +3,8 @@ package com.xhq.tank.strategy;
 import com.xhq.tank.Player;
 import com.xhq.tank.Tank;
 
-public interface FireStrategy {
+import java.io.Serializable;
+
+public interface FireStrategy extends Serializable {
     public void fire(Player p);
 }

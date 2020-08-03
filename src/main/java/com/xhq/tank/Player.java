@@ -7,8 +7,9 @@ import com.xhq.tank.strategy.LeftRightFireStrategy;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
-public class Player extends AbstractGameObject{
+public class Player extends AbstractGameObject {
     private int x;
     private int y;
 

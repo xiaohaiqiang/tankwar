@@ -1,5 +1,7 @@
 package com.xhq.tank;
 
+import com.xhq.tank.net.TankJoinMsg;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -7,8 +9,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank extends AbstractGameObject{
+    public static final int SPEED = 5;
     private int x;
     private int y;
     private Dir dir;
@@ -19,6 +23,24 @@ public class Tank extends AbstractGameObject{
 
     private int oldX, oldY;
     private Rectangle rect;
+
+    private UUID id;
+
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.getX();
+        this.y = msg.getY();
+        this.dir = msg.getDir();
+        this.moving = msg.isMoving();
+        this.group = msg.getGroup();
+        this.id = msg.getId();
+
+        oldX = x;
+        oldY = y;
+        this.width = ResourceMgr.goodTankU.getWidth();
+        this.height = ResourceMgr.goodTankU.getHeight();
+
+        this.rect = new Rectangle(x,y,width,height);
+    }
 
     public Group getGroup() {
         return group;
@@ -37,8 +59,6 @@ public class Tank extends AbstractGameObject{
     }
 
     private boolean live = true;
-
-    public static final int SPEED = 5;
 
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -59,16 +79,16 @@ public class Tank extends AbstractGameObject{
 
         switch (dir){
             case L:
-                g.drawImage(ResourceMgr.badTankL, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD)? ResourceMgr.badTankL: ResourceMgr.goodTankL, x, y, null);
                 break;
             case R:
-                g.drawImage(ResourceMgr.badTankR, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD)? ResourceMgr.badTankR: ResourceMgr.goodTankR, x, y, null);
                 break;
             case U:
-                g.drawImage(ResourceMgr.badTankU, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD)? ResourceMgr.badTankU: ResourceMgr.goodTankU, x, y, null);
                 break;
             case D:
-                g.drawImage(ResourceMgr.badTankD, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD)? ResourceMgr.badTankD: ResourceMgr.goodTankD, x, y, null);
                 break;
         }
 
@@ -102,10 +122,11 @@ public class Tank extends AbstractGameObject{
         }
         boundsCheck();
 
-        randomDir();
-        if(r.nextInt(100) > 90){
-            fire();
-        }
+        //randomDir();
+
+//        if(r.nextInt(100) > 90){
+//            fire();
+//        }
     }
 
     private Random r = new Random();
@@ -156,5 +177,29 @@ public class Tank extends AbstractGameObject{
     public Rectangle getRect() {
 
         return rect;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
     }
 }
